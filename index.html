@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer & Product Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #0078d4;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Search Customers & Products</h1>
+
+    <h2>Search Customers</h2>
+    <input type="text" id="customerSearch" placeholder="Enter customer name...">
+    <button onclick="searchCustomers()">Search</button>
+    <table id="customerTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h2>Search Products</h2>
+    <input type="text" id="productSearch" placeholder="Enter product name...">
+    <button onclick="searchProducts()">Search</button>
+    <table id="productTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        const API_BASE = '/data-api';  // Relative path in Static Web App
+
+        async function searchCustomers() {
+            const term = document.getElementById('customerSearch').value;
+            if (!term) return;
+            const url = `${API_BASE}/Customers?$filter=contains(Name, '${term}')`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const tbody = document.querySelector('#customerTable tbody');
+                tbody.innerHTML = '';
+                data.forEach(customer => {
+                    const row = tbody.insertRow();
+                    row.insertCell(0).textContent = customer.Id;
+                    row.insertCell(1).textContent = customer.Name;
+                    row.insertCell(2).textContent = customer.Email;
+                });
+            } catch (error) {
+                alert('Error: ' + error);
+            }
+        }
+
+        async function searchProducts() {
+            const term = document.getElementById('productSearch').value;
+            if (!term) return;
+            const url = `${API_BASE}/Products?$filter=contains(Name, '${term}')`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const tbody = document.querySelector('#productTable tbody');
+                tbody.innerHTML = '';
+                data.forEach(product => {
+                    const row = tbody.insertRow();
+                    row.insertCell(0).textContent = product.Id;
+                    row.insertCell(1).textContent = product.Name;
+                    row.insertCell(2).textContent = product.Description;
+                });
+            } catch (error) {
+                alert('Error: ' + error);
+            }
+        }
+    </script>
+</body>
+
+</html>

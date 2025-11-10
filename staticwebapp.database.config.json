@@ -1,0 +1,29 @@
+{
+    "dataSource": {
+        "connectionString": "your-sql-connection-string-with-{0} placeholder" // Or use managed identity
+    },
+    "entities": {
+        "Customers": {
+            "source": "dbo.Customers",
+            "permissions": [
+                {
+                    "actions": [
+                        "Read"
+                    ],
+                    "role": "authenticated"
+                }
+            ]
+        },
+        "Products": {
+            "source": "dbo.Products",
+            "permissions": [
+                {
+                    "actions": [
+                        "Read"
+                    ],
+                    "role": "authenticated"
+                }
+            ]
+        }
+    }
+}
